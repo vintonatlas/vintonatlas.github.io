@@ -99,7 +99,7 @@ p { margin: 0; }
   </div>
 
   <section class="box" aria-labelledby="rev">
-    <h2 id="rev">Unlock your five gifts</h2>
+    <h2 id="rev">Unlock your three atlas gifts</h2>
     <p>Leave a short, honest review of the atlas on Amazon, then come back and tap the second button. It takes about two minutes.</p>
     <ol class="steps">
       <li>Tap <strong>Write a review</strong>: Amazon opens the review page for this book.</li>
@@ -117,7 +117,7 @@ p { margin: 0; }
     <h2 id="locked">Made for this atlas</h2>
     <ol class="list locked" id="extras">
       <li class="item"><span class="n">1</span><div><h3>Printable blank maps</h3><p>Twelve wine maps in outline, to fill in as you taste.</p><span class="get"><a class="dl" href="https://vintonatlas.github.io/bonus/blank-maps.pdf" target="_blank" rel="noopener">Download PDF</a></span></div></li>
-      <li class="item"><span class="n">2</span><div><h3>Pronunciation audio</h3><p>Every name in the book, spoken slowly in its own language.</p><span class="get"><a class="dl" href="https://vintonatlas.github.io/bonus/say-it-right.html" target="_blank" rel="noopener">Listen</a></span></div></li>
+      <li class="item"><span class="n">2</span><div><h3>Pronunciation audio</h3><p>Every name in the pronunciation key, spoken slowly in its own language.</p><span class="get"><a class="dl" href="https://vintonatlas.github.io/bonus/say-it-right.html" target="_blank" rel="noopener">Listen</a></span></div></li>
       <li class="item"><span class="n">3</span><div><h3>Tasting sheet and tasting mat</h3><p>For the four-glass tasting on page 102.</p><span class="get"><a class="dl" href="https://vintonatlas.github.io/bonus/tasting-sheet-and-mat.pdf" target="_blank" rel="noopener">Download PDF</a></span></div></li>
     </ol>
   </section>
@@ -125,9 +125,9 @@ p { margin: 0; }
   <hr class="rule">
 
   <section class="box" aria-labelledby="rev2">
-    <h2 id="rev2">Enjoying the atlas?</h2>
-    <p>Your review is the best way to help other wine lovers find this book. Two sentences and a photo of your favorite map are perfect.</p>
-    <div class="actions"><a class="btn" href="https://www.amazon.com/review/create-review?asin=REPLACE-WITH-YOUR-ASIN" target="_blank" rel="noopener">Write a review</a></div>
+    <h2 id="rev2">Unlock two more gifts</h2>
+    <p>Leave a short, honest review of the atlas on Amazon, with two sentences and a photo of your favorite map, then come back and tap the second button.</p>
+    <div class="actions"><a class="btn" href="https://www.amazon.com/review/create-review?asin=REPLACE-WITH-YOUR-ASIN" target="_blank" rel="noopener">Write a review</a><button class="btn ghost" id="unlockBtn2" type="button">Yes, I have left my review</button></div>
   </section>
 
   <section aria-labelledby="ready" style="display:grid;gap:0.9rem">
@@ -149,11 +149,14 @@ p { margin: 0; }
   function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function showGifts() { thanks.hidden = true; gifts.hidden = false; window.scrollTo(0, 0); }
-  function unlock() { extras.classList.remove("locked"); document.getElementById("extras2").classList.remove("locked"); var b = document.getElementById("unlockBtn"); b.textContent = "Gifts unlocked"; b.disabled = true; }
+  function unlock() { extras.classList.remove("locked"); var b = document.getElementById("unlockBtn"); b.textContent = "Gifts unlocked"; b.disabled = true; }
   document.getElementById("go").addEventListener("click", function () { showGifts(); });
   document.getElementById("unlockBtn").addEventListener("click", function () { save("wla-unlocked", "1"); unlock(); });
   // always open on the Thank you page; the gifts page shows after the tap
+  function unlock2() { document.getElementById("extras2").classList.remove("locked"); var b2 = document.getElementById("unlockBtn2"); b2.textContent = "Gifts unlocked"; b2.disabled = true; }
+  document.getElementById("unlockBtn2").addEventListener("click", function () { save("wla-unlocked2", "1"); unlock2(); });
   if (load("wla-unlocked") === "1") unlock();
+  if (load("wla-unlocked2") === "1") unlock2();
 })();
 </script>
 
