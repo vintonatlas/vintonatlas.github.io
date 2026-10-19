@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Say It Right</title>
+<meta name="description" content="Hear every name in The Wine Lover's Atlas pronunciation key, spoken by your own device in the right language.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root {
+  --paper: #F7F1E8;
+  --sheet: #FFFDF9;
+  --ink: #2B2420;
+  --muted: #6E625A;
+  --claret: #7A1F2E;
+  --claret-ink: #FFFDF9;
+  --line: #E2D6C6;
+  --wash: #EFE5D6;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1D1816; --sheet: #27211E; --ink: #F2EAE0; --muted: #BCAEA2; --claret: #E08592; --claret-ink: #1D1816; --line: #45392F; --wash: #2F2824;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1D1816; --sheet: #27211E; --ink: #F2EAE0; --muted: #BCAEA2; --claret: #E08592; --claret-ink: #1D1816; --line: #45392F; --wash: #2F2824;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--serif); font-size: 1.0625rem; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: 1.75rem; padding-bottom: 2.5rem;
+}
+.page { max-width: 46rem; margin: 0 auto; }
+.kicker { font-family: var(--sans); font-weight: 600; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--claret); margin: 0 0 .35rem; }
+h1 { font-weight: 700; font-size: clamp(2.1rem, 8vw, 3rem); line-height: 1.05; margin: 0 0 .6rem; letter-spacing: -.01em; }
+.rule { height: 3px; width: 3.5rem; background: var(--claret); margin: 0 0 .9rem; border: 0; }
+.intro { margin: 0 0 1.25rem; max-width: 38rem; }
+.key { font-family: var(--sans); font-size: .9rem; color: var(--muted); margin: -.6rem 0 1.25rem; }
+.key i { font-family: var(--serif); color: var(--ink); }
+
+.controls { position: sticky; top: 0; z-index: 5; background: var(--paper); padding: .6rem 0 .7rem; border-bottom: 1px solid var(--line); margin-bottom: .25rem; }
+.search { position: relative; }
+.search input {
+  width: 100%; font: inherit; font-family: var(--sans); font-size: 1.05rem; color: var(--ink);
+  background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .9rem .7rem 2.4rem; min-height: 48px;
+}
+.search input:focus { outline: 2px solid var(--claret); outline-offset: 1px; }
+.search svg { position: absolute; left: .8rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; stroke: var(--muted); }
+.row2 { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; justify-content: space-between; margin-top: .6rem; font-family: var(--sans); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--sheet); }
+.seg button { font: inherit; font-size: .92rem; font-weight: 600; color: var(--muted); background: none; border: 0; border-radius: 999px; padding: .45rem .9rem; min-height: 40px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--claret); color: var(--claret-ink); }
+.slow { display: inline-flex; align-items: center; gap: .55rem; font-size: .95rem; font-weight: 600; cursor: pointer; user-select: none; min-height: 44px; }
+.slow input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.slow .track { width: 44px; height: 26px; border-radius: 999px; background: var(--line); position: relative; transition: background .15s; flex: none; }
+.slow .track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--sheet); box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.slow input:checked + .track { background: var(--claret); }
+.slow input:checked + .track::after { transform: translateX(18px); }
+.slow input:focus-visible + .track { outline: 2px solid var(--claret); outline-offset: 2px; }
+.count { font-family: var(--sans); font-size: .85rem; color: var(--muted); margin: .5rem 0 0; }
+
+.notice { font-family: var(--sans); font-size: .95rem; background: var(--wash); border-left: 3px solid var(--claret); padding: .7rem .9rem; border-radius: 0 8px 8px 0; margin: .9rem 0 .2rem; }
+.notice[hidden] { display: none; }
+
+h2 { font-family: var(--sans); font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: var(--claret); font-weight: 700; margin: 1.5rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 1rem; }
+h2 span { color: var(--muted); font-weight: 600; letter-spacing: .06em; }
+ul { list-style: none; margin: 0; padding: 0; }
+li.e { display: grid; grid-template-columns: 1fr auto 52px; align-items: center; gap: .25rem .75rem; padding: .55rem 0; border-bottom: 1px solid var(--line); }
+.nm { font-weight: 600; font-size: 1.12rem; line-height: 1.25; overflow-wrap: anywhere; }
+.rs { font-style: italic; color: var(--ink); font-size: 1rem; overflow-wrap: anywhere; }
+.rs b { font-weight: 700; color: var(--claret); letter-spacing: .01em; }
+.pg { font-family: var(--sans); font-size: .85rem; color: var(--muted); white-space: nowrap; text-align: right; }
+.play {
+  width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--claret); background: var(--sheet); color: var(--claret);
+  display: grid; place-items: center; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent;
+}
+.play svg { width: 22px; height: 22px; fill: currentColor; }
+.play:hover { background: var(--wash); }
+.play:focus-visible { outline: 2px solid var(--claret); outline-offset: 2px; }
+.play.on { background: var(--claret); color: var(--claret-ink); }
+.play:disabled { opacity: .35; cursor: default; }
+.empty { font-family: var(--sans); color: var(--muted); padding: 1.5rem 0; }
+
+.status { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(150%); background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: .88rem; padding: .5rem .9rem; border-radius: 999px; max-width: calc(100% - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: transform .2s, opacity .2s; pointer-events: none; opacity: 0; visibility: hidden; }
+.status.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+
+.about { font-family: var(--sans); font-size: .93rem; color: var(--muted); margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.about p { margin: 0 0 .6rem; }
+.about strong { color: var(--ink); }
+footer { font-family: var(--sans); font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: center; margin-top: 2rem; }
+
+@media (min-width: 720px) {
+  body { padding-top: 3rem; }
+  li.e { grid-template-columns: minmax(0, 15rem) 1fr auto 52px; }
+  .nm { grid-column: 1; } .rs { grid-column: 2; }
+}
+@media (max-width: 719px) {
+  li.e { grid-template-areas: "nm pg play" "rs rs play"; grid-template-columns: 1fr auto 52px; }
+  .nm { grid-area: nm; } .rs { grid-area: rs; } .pg { grid-area: pg; } .play { grid-area: play; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <p class="kicker">The Wine Lover's Atlas · Bonus</p>
+  <h1>Say It Right</h1>
+  <hr class="rule">
+  <p class="intro">Tap a name to hear it. Your phone's own voice reads it in the right language; the respelling shows how to say it as an American speaker.</p>
+  <p class="key">Capital letters mark the stressed syllable: <i>bor-<b style="color:var(--claret)">DOH</b></i> sounds like "bore-DOE". The number is the atlas page.</p>
+
+  <div class="controls">
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search a name, a country, a sound" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search names">
+    </label>
+    <div class="row2">
+      <div class="seg" role="group" aria-label="Order">
+        <button type="button" id="vAZ" aria-pressed="true">A to Z</button>
+        <button type="button" id="vCountry" aria-pressed="false">By country</button>
+      </div>
+      <label class="slow"><input type="checkbox" id="slow" checked><span class="track" aria-hidden="true"></span>Slow speed</label>
+    </div>
+    <p class="count" id="count" aria-live="polite"></p>
+  </div>
+
+  <p class="notice" id="nospeech" hidden>This browser cannot speak aloud, so the play buttons are switched off. Every respelling still works: read the capital letters a little louder.</p>
+
+  <div id="list"></div>
+
+  <section class="about">
+    <p><strong>Where the voices come from.</strong> Nothing is recorded here: your phone, tablet or computer reads each name with the voices it already has, choosing a French voice for French names, an Italian voice for Italian names, and so on. If your device has no voice for a language (Georgian is rare), an American English voice reads the book's respelling instead. Voices differ from device to device, and so do native speakers; the respelling is always your safe guide.</p>
+    <p><strong>Want more voices?</strong> On iPhone and iPad go to Settings &gt; Accessibility &gt; Spoken Content &gt; Voices, pick a language and download a voice (the Enhanced ones sound best). On Android, look in Settings for Text-to-speech output and install extra language data. On a Mac, System Settings &gt; Accessibility &gt; Spoken Content &gt; System Voice &gt; Manage Voices.</p>
+  </section>
+  <footer>The Wine Lover's Atlas · 2027-2028 Edition</footer>
+</main>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<script id="data" type="application/json">{"groups":["France","Italy","Spain","Portugal","Germany","Austria","England","Greece","Georgia","Hungary","United States","Mexico","Canada","Chile","Argentina","Australia","New Zealand","South Africa","Bubbles of the World","Grapes You Will Meet Everywhere"],"entries":[{"word":"Aglianico","respelling":"ahl-YAH-nee-koh","page":47,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Aglianico","en":"ahl-yah-nee-koh"},{"word":"Albariño","respelling":"ahl-bah-REEN-yoh","page":53,"group":"Spain","lang":"es-ES","langs":["es-ES"],"say":"Albariño","en":"ahl-bah-reen-yoh"},{"word":"Alentejo","respelling":"ah-len-TAY-zhoo","page":58,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Alentejo","en":"ah-len-tay-zhoo"},{"word":"Alvarinho","respelling":"ahl-vah-REEN-yoo","page":57,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Alvarinho","en":"ahl-vah-reen-yoo"},{"word":"Amarone","respelling":"ah-mah-ROH-nay","page":45,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Amarone","en":"ah-mah-roh-nay"},{"word":"Amontillado","respelling":"ah-mohn-tee-YAH-doh","page":54,"group":"Spain","lang":"es-ES","langs":["es-ES"],"say":"Amontillado","en":"ah-mohn-tee-yah-doh"},{"word":"Assyrtiko","respelling":"ah-SEER-tee-ko","page":68,"group":"Greece","lang":"el-GR","langs":["el-GR"],"say":"Ασύρτικο","en":"ah-seer-tee-ko"},{"word":"Aszú","respelling":"AH-soo","page":70,"group":"Hungary","lang":"hu-HU","langs":["hu-HU"],"say":"Aszú","en":"ah-soo"},{"word":"Auslese","respelling":"OWS-lay-zuh","page":60,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Auslese","en":"ows-lay-zuh"},{"word":"Awatere","respelling":"AH-wah-teh-reh","page":97,"group":"New Zealand","lang":"en-NZ","langs":["en-NZ","en-AU","en-GB"],"say":"ah-wah-teh-reh","en":"ah-wah-teh-reh"},{"word":"Bairrada","respelling":"bye-RAH-dah","page":55,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Bairrada","en":"bye-rah-dah"},{"word":"Barbaresco","respelling":"bar-bah-RESS-koh","page":41,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Barbaresco","en":"bar-bah-ress-koh"},{"word":"Barolo","respelling":"bah-ROH-loh","page":41,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Barolo","en":"bah-roh-loh"},{"word":"Barossa","respelling":"buh-ROSS-uh","page":95,"group":"Australia","lang":"en-AU","langs":["en-AU"],"say":"Barossa","en":"buh-ross-uh"},{"word":"Beaujolais","respelling":"boh-zhoh-LAY","page":27,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Beaujolais","en":"boh-zhoh-lay"},{"word":"Bernkastel","respelling":"BAIRN-kahst-el","page":63,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Bernkastel","en":"bairn-kahst-el"},{"word":"Blanc de Blancs","respelling":"blahn duh BLAHN","page":29,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Blanc de Blancs","en":"blahn duh blahn"},{"word":"Blaufränkisch","respelling":"BLOUW-frenk-ish","page":67,"group":"Austria","lang":"de-AT","langs":["de-AT","de-DE"],"say":"Blaufränkisch","en":"blouw-frenk-ish"},{"word":"Bordeaux","respelling":"bor-DOH","page":21,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Bordeaux","en":"bor-doh"},{"word":"Bourgogne","respelling":"boor-GOHN-yuh","page":23,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Bourgogne","en":"boor-gohn-yuh"},{"word":"Brunello","respelling":"broo-NELL-oh","page":43,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Brunello","en":"broo-nell-oh"},{"word":"Brut Nature","respelling":"broot nah-TOOR","page":102,"group":"Bubbles of the World","lang":"fr-FR","langs":["fr-FR"],"say":"Brut Nature","en":"broot nah-toor"},{"word":"Cabernet Sauvignon","respelling":"kab-er-NAY soh-vin-YOHN","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Cabernet Sauvignon","en":"kab-er-nay soh-vin-yohn"},{"word":"Carmenère","respelling":"kar-meh-NAIR","page":89,"group":"Chile","lang":"fr-FR","langs":["fr-FR"],"say":"Carmenère","en":"kar-meh-nair"},{"word":"Carneros","respelling":"kar-NAIR-ohs","page":73,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Carneros","en":"kar-nair-ohs"},{"word":"Cava","respelling":"KAH-vah","page":101,"group":"Bubbles of the World","lang":"es-ES","langs":["es-ES"],"say":"Cava","en":"kah-vah"},{"word":"Cayuga","respelling":"kay-YOO-guh","page":83,"group":"United States","lang":"en-US","langs":["en-US"],"say":"kay-yoo-guh","en":"kay-yoo-guh"},{"word":"Chablis","respelling":"shah-BLEE","page":27,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Chablis","en":"shah-blee"},{"word":"Chardonnay","respelling":"shar-doh-NAY","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Chardonnay","en":"shar-doh-nay"},{"word":"Châteauneuf-du-Pape","respelling":"shah-toh-NUF doo PAHP","page":33,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Châteauneuf-du-Pape","en":"shah-toh-nuf doo pahp"},{"word":"Chenin Blanc","respelling":"SHEN-in BLAHNK","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Chenin Blanc","en":"shen-in blahnk"},{"word":"Chianti","respelling":"kee-AHN-tee","page":43,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Chianti","en":"kee-ahn-tee"},{"word":"climat","respelling":"klee-MAH","page":23,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"climat","en":"klee-mah"},{"word":"Colchagua","respelling":"kol-CHAH-gwah","page":89,"group":"Chile","lang":"es-CL","langs":["es-CL","es-419","es-US","es-ES"],"say":"Colchagua","en":"kol-chah-gwah"},{"word":"Constantia","respelling":"con-STAN-shuh","page":99,"group":"South Africa","lang":"en-ZA","langs":["en-ZA","en-GB"],"say":"Constantia","en":"con-stan-shuh"},{"word":"Coonawarra","respelling":"KOO-nuh-WOR-uh","page":95,"group":"Australia","lang":"en-AU","langs":["en-AU","en-GB"],"say":"koo-nuh-worr-uh","en":"koo-nuh-worr-uh"},{"word":"Côte d'Or","respelling":"koht DOR","page":23,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Côte d'Or","en":"koht dor"},{"word":"Côte-Rôtie","respelling":"koht roh-TEE","page":33,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Côte-Rôtie","en":"koht roh-tee"},{"word":"Crémant","respelling":"kray-MAHN","page":101,"group":"Bubbles of the World","lang":"fr-FR","langs":["fr-FR"],"say":"Crémant","en":"kray-mahn"},{"word":"Crianza","respelling":"kree-AHN-thah","page":51,"group":"Spain","lang":"es-ES","langs":["es-ES"],"say":"Crianza","en":"kree-ahn-thah"},{"word":"Dão","respelling":"DOWN (nasal)","page":55,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Dão","en":"down"},{"word":"Douro","respelling":"DOH-roo","page":57,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Douro","en":"doh-roo"},{"word":"Elgin","respelling":"EL-ghin","page":100,"group":"South Africa","lang":"en-ZA","langs":["en-ZA","en-GB"],"say":"ell-ghin","en":"ell-ghin"},{"word":"Eola-Amity","respelling":"ee-OH-luh AM-ih-tee","page":79,"group":"United States","lang":"en-US","langs":["en-US"],"say":"ee-oh-luh amity","en":"ee-oh-luh amity"},{"word":"Épernay","respelling":"ay-pair-NAY","page":29,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Épernay","en":"ay-pair-nay"},{"word":"Franciacorta","respelling":"fran-chah-KOR-tah","page":101,"group":"Bubbles of the World","lang":"it-IT","langs":["it-IT"],"say":"Franciacorta","en":"fran-chah-kor-tah"},{"word":"Franschhoek","respelling":"fran-SHOOK","page":99,"group":"South Africa","lang":"en-ZA","langs":["en-ZA","en-GB"],"say":"fran-shook","en":"fran-shook"},{"word":"Furmint","respelling":"FOOR-mint","page":70,"group":"Hungary","lang":"hu-HU","langs":["hu-HU"],"say":"Furmint","en":"foor-mint"},{"word":"Gamay","respelling":"gah-MAY","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Gamay","en":"gah-may"},{"word":"Gewurztraminer","respelling":"guh-VURTS-trah-mee-ner","page":36,"group":"France","lang":"de-DE","langs":["de-DE"],"say":"Gewürztraminer","en":"guh-vurts-trah-mee-ner"},{"word":"Gigondas","respelling":"zhee-gohn-DAHSS","page":33,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Gigondas","en":"zhee-gohn-dahss"},{"word":"Glera","respelling":"GLEH-rah","page":102,"group":"Bubbles of the World","lang":"it-IT","langs":["it-IT"],"say":"Glera","en":"gleh-rah"},{"word":"Graves","respelling":"GRAHV","page":21,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Graves","en":"grahv"},{"word":"Grenache","respelling":"gruh-NAHSH","page":95,"group":"Australia","lang":"en-AU","langs":["en-AU","en-GB"],"say":"Grenache","en":"gruh-nahsh"},{"word":"Großes Gewächs","respelling":"GROH-sess guh-VEKS","page":61,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Großes Gewächs","en":"groh-sess guh-veks"},{"word":"Grüner Veltliner","respelling":"GROO-ner FELT-lee-ner","page":67,"group":"Austria","lang":"de-AT","langs":["de-AT","de-DE"],"say":"Grüner Veltliner","en":"groo-ner felt-lee-ner"},{"word":"Hemel-en-Aarde","respelling":"HEE-mel en AR-duh","page":100,"group":"South Africa","lang":"af-ZA","langs":["af-ZA","nl-NL","en-ZA"],"say":"Hemel-en-Aarde","en":"hee-mel en ar-duh"},{"word":"Icewine","respelling":"ICE-wine","page":86,"group":"Canada","lang":"en-CA","langs":["en-CA","en-US"],"say":"Icewine","en":"ice-wine"},{"word":"Itata","respelling":"ee-TAH-tah","page":89,"group":"Chile","lang":"es-CL","langs":["es-CL","es-419","es-US","es-ES"],"say":"Itata","en":"ee-tah-tah"},{"word":"Jerez","respelling":"heh-RETH","page":54,"group":"Spain","lang":"es-ES","langs":["es-ES"],"say":"Jerez","en":"heh-reth"},{"word":"Kabinett","respelling":"kah-bee-NET","page":60,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Kabinett","en":"kah-bee-net"},{"word":"Keuka","respelling":"KYOO-kuh","page":83,"group":"United States","lang":"en-US","langs":["en-US"],"say":"kyoo-kuh","en":"kyoo-kuh"},{"word":"Lage","respelling":"LAH-guh","page":61,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Lage","en":"lah-guh"},{"word":"Lambrusco","respelling":"lahm-BROO-skoh","page":48,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Lambrusco","en":"lahm-broo-skoh"},{"word":"Langhe","respelling":"LAHN-gay","page":41,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Langhe","en":"lahn-gay"},{"word":"Languedoc","respelling":"lahng-DOCK","page":35,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Languedoc","en":"lahng-dock"},{"word":"Lodi","respelling":"LOH-dye","page":77,"group":"United States","lang":"en-US","langs":["en-US"],"say":"low-dye","en":"low-dye"},{"word":"Luján de Cuyo","respelling":"loo-HAHN deh KOO-yoh","page":91,"group":"Argentina","lang":"es-AR","langs":["es-AR","es-419","es-US","es-ES"],"say":"Luján de Cuyo","en":"loo-hahn deh koo-yoh"},{"word":"Madeira","respelling":"mah-DEER-ah","page":58,"group":"Portugal","lang":"en-US","langs":["en-US"],"say":"Madeira","en":"mah-deer-ah"},{"word":"Maipo","respelling":"MY-poh","page":89,"group":"Chile","lang":"es-CL","langs":["es-CL","es-419","es-US","es-ES"],"say":"Maipo","en":"my-poh"},{"word":"Malbec","respelling":"MAHL-bek","page":91,"group":"Argentina","lang":"en-US","langs":["en-US"],"say":"Malbec","en":"mahl-bek"},{"word":"Manzanilla","respelling":"mahn-thah-NEE-yah","page":54,"group":"Spain","lang":"es-ES","langs":["es-ES"],"say":"Manzanilla","en":"mahn-thah-nee-yah"},{"word":"Marlborough","respelling":"MAWL-bruh","page":97,"group":"New Zealand","lang":"en-NZ","langs":["en-NZ","en-AU","en-GB"],"say":"Marlborough","en":"mawl-bruh"},{"word":"Mayacamas","respelling":"my-uh-KAH-mus","page":73,"group":"United States","lang":"en-US","langs":["en-US"],"say":"my-uh-kah-muss","en":"my-uh-kah-muss"},{"word":"Médoc","respelling":"may-DOCK","page":21,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Médoc","en":"may-dock"},{"word":"Merlot","respelling":"mer-LOH","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Merlot","en":"mer-loh"},{"word":"Meunier","respelling":"muhn-YAY","page":29,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Meunier","en":"muhn-yay"},{"word":"Meursault","respelling":"mur-SOH","page":25,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Meursault","en":"mur-soh"},{"word":"Montepulciano","respelling":"mohn-teh-pool-CHAH-noh","page":48,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Montepulciano","en":"mohn-teh-pool-chah-noh"},{"word":"Mosel","respelling":"MOH-zel","page":63,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Mosel","en":"moh-zel"},{"word":"Mourvèdre","respelling":"moor-VED-ruh","page":35,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Mourvèdre","en":"moor-ved-ruh"},{"word":"Muscadet","respelling":"moos-kah-DAY","page":31,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Muscadet","en":"moos-kah-day"},{"word":"Napa","respelling":"NAP-uh","page":73,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Napa","en":"nap-uh"},{"word":"Nebbiolo","respelling":"neb-BYOH-loh","page":41,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Nebbiolo","en":"neb-byoh-loh"},{"word":"négociant","respelling":"nay-goh-SYAHN","page":23,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"négociant","en":"nay-goh-syahn"},{"word":"Nerello Mascalese","respelling":"neh-RELL-oh mahs-kah-LAY-zay","page":47,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Nerello Mascalese","en":"neh-rell-oh mahs-kah-lay-zay"},{"word":"Niagara","respelling":"ny-AG-ruh","page":86,"group":"Canada","lang":"en-CA","langs":["en-CA","en-US"],"say":"Niagara","en":"ny-ag-ruh"},{"word":"Nk'Mip","respelling":"in-ka-MEEP","page":87,"group":"Canada","lang":"en-CA","langs":["en-CA","en-US"],"say":"in-ka-meep","en":"in-ka-meep"},{"word":"Nuits-Saint-Georges","respelling":"nwee san ZHORZH","page":25,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Nuits-Saint-Georges","en":"nwee san zhorzh"},{"word":"Nyetimber","respelling":"NYE-tim-ber","page":68,"group":"England","lang":"en-GB","langs":["en-GB"],"say":"Nyetimber","en":"nye-tim-ber"},{"word":"Okanagan","respelling":"oh-kuh-NAH-gun","page":87,"group":"Canada","lang":"en-CA","langs":["en-CA","en-US"],"say":"Okanagan","en":"oh-kuh-nah-gun"},{"word":"Ortswein","respelling":"ORTS-vine","page":61,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Ortswein","en":"orts-vine"},{"word":"Osoyoos","respelling":"oh-SOO-yoos","page":87,"group":"Canada","lang":"en-CA","langs":["en-CA","en-US"],"say":"oh-soo-yoos","en":"oh-soo-yoos"},{"word":"Otago","respelling":"oh-TAH-go","page":97,"group":"New Zealand","lang":"en-NZ","langs":["en-NZ","en-AU","en-GB"],"say":"Otago","en":"oh-tah-go"},{"word":"Paso Robles","respelling":"PASS-oh ROH-buls","page":77,"group":"United States","lang":"en-US","langs":["en-US"],"say":"passo robuls","en":"passo robuls"},{"word":"Pauillac","respelling":"poh-YAK","page":21,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Pauillac","en":"poh-yak"},{"word":"Petaluma","respelling":"pet-uh-LOO-muh","page":75,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Petaluma","en":"pet-uh-loo-muh"},{"word":"Pfalz","respelling":"pfahlts","page":65,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Pfalz","en":"pfahlts"},{"word":"Piesport","respelling":"PEES-port","page":63,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Piesport","en":"pees-port"},{"word":"Pinot Grigio","respelling":"PEE-noh GREE-joh","page":null,"group":"Grapes You Will Meet Everywhere","lang":"it-IT","langs":["it-IT"],"say":"Pinot Grigio","en":"pee-noh gree-joh"},{"word":"Pinot Noir","respelling":"PEE-noh NWAHR","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Pinot Noir","en":"pee-noh nwahr"},{"word":"Pinotage","respelling":"PIN-oh-tahzh","page":99,"group":"South Africa","lang":"en-ZA","langs":["en-ZA","en-GB"],"say":"Pinotage","en":"pin-oh-tahzh"},{"word":"Pouilly-Fuissé","respelling":"poo-YEE fwee-SAY","page":27,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Pouilly-Fuissé","en":"poo-yee fwee-say"},{"word":"Primitivo","respelling":"pree-mee-TEE-voh","page":47,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Primitivo","en":"pree-mee-tee-voh"},{"word":"Priorat","respelling":"pree-oh-RAHT","page":53,"group":"Spain","lang":"ca-ES","langs":["ca-ES","es-ES"],"say":"Priorat","en":"pree-oh-raht"},{"word":"Prosecco","respelling":"proh-SEK-oh","page":45,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Prosecco","en":"proh-sek-oh"},{"word":"qvevri","respelling":"KVEV-ree","page":69,"group":"Georgia","lang":"ka-GE","langs":["ka-GE"],"say":"ქვევრი","en":"kvev-ree"},{"word":"Rheingau","respelling":"RINE-gow","page":65,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Rheingau","en":"rine-gow"},{"word":"Rheinhessen","respelling":"rine-HESS-en","page":65,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Rheinhessen","en":"rine-hess-en"},{"word":"Rías Baixas","respelling":"REE-ahs BYE-shahs","page":53,"group":"Spain","lang":"gl-ES","langs":["gl-ES","pt-PT","pt-BR","es-ES"],"say":"Rías Baixas","en":"ree-ahs bye-shahs"},{"word":"Ribera del Duero","respelling":"ree-BEH-rah del DWEH-roh","page":51,"group":"Spain","lang":"es-ES","langs":["es-ES"],"say":"Ribera del Duero","en":"ree-beh-rah del dweh-roh"},{"word":"Riesling","respelling":"REES-ling","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Riesling","en":"rees-ling"},{"word":"Rioja","respelling":"ree-OH-hah","page":51,"group":"Spain","lang":"es-ES","langs":["es-ES"],"say":"Rioja","en":"ree-oh-hah"},{"word":"Riquewihr","respelling":"reek-VEER","page":36,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Riquewihr","en":"reek-veer"},{"word":"Rkatsiteli","respelling":"r-kaht-see-TEH-lee","page":69,"group":"Georgia","lang":"ka-GE","langs":["ka-GE"],"say":"რქაწითელი","en":"r-kaht-see-teh-lee"},{"word":"Roussillon","respelling":"roo-see-YOHN","page":35,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Roussillon","en":"roo-see-yohn"},{"word":"Rutherglen","respelling":"RUTH-er-glen","page":93,"group":"Australia","lang":"en-AU","langs":["en-AU"],"say":"Rutherglen","en":"ruth-er-glen"},{"word":"Sancerre","respelling":"sahn-SAIR","page":31,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Sancerre","en":"sahn-sair"},{"word":"Sangiovese","respelling":"sahn-joh-VAY-zay","page":43,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Sangiovese","en":"sahn-joh-vay-zay"},{"word":"Saperavi","respelling":"sah-peh-RAH-vee","page":69,"group":"Georgia","lang":"ka-GE","langs":["ka-GE"],"say":"საფერავი","en":"sah-peh-rah-vee"},{"word":"Sauternes","respelling":"soh-TERN","page":21,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Sauternes","en":"soh-tern"},{"word":"Sauvignon Blanc","respelling":"soh-vin-YOHN BLAHNK","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Sauvignon Blanc","en":"soh-vin-yohn blahnk"},{"word":"Semillon","respelling":"SEM-ih-lon","page":92,"group":"Australia","lang":"en-AU","langs":["en-AU","en-GB"],"say":"Semillon","en":"sem-ih-lon"},{"word":"Seneca","respelling":"SEN-ih-kuh","page":83,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Seneca","en":"sen-ih-kuh"},{"word":"Sercial","respelling":"sehr-see-AHL","page":58,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Sercial","en":"sehr-see-ahl"},{"word":"Shiraz","respelling":"shih-RAHZ","page":92,"group":"Australia","lang":"en-AU","langs":["en-AU","en-GB"],"say":"Shiraz","en":"shih-rahz"},{"word":"Sonoma","respelling":"suh-NOH-muh","page":75,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Sonoma","en":"suh-noh-muh"},{"word":"Spätburgunder","respelling":"SHPAYT-boor-goon-der","page":65,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Spätburgunder","en":"shpayt-boor-goon-der"},{"word":"Spätlese","respelling":"SHPAYT-lay-zuh","page":60,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Spätlese","en":"shpayt-lay-zuh"},{"word":"Sta. Rita Hills","respelling":"SAN-tuh REE-tuh HILLS","page":77,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Santa Rita Hills","en":"san-tuh ree-tuh hills"},{"word":"Stellenbosch","respelling":"STEL-en-boss","page":99,"group":"South Africa","lang":"af-ZA","langs":["af-ZA","nl-NL","en-ZA"],"say":"Stellenbosch","en":"stel-en-boss"},{"word":"Swartland","respelling":"SVART-lunt","page":100,"group":"South Africa","lang":"af-ZA","langs":["af-ZA","nl-NL","en-ZA"],"say":"Swartland","en":"svart-lunt"},{"word":"Syrah","respelling":"sih-RAH","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Syrah","en":"sih-rah"},{"word":"Szamorodni","respelling":"SAH-mo-rod-nee","page":70,"group":"Hungary","lang":"hu-HU","langs":["hu-HU"],"say":"Szamorodni","en":"sah-mo-rod-nee"},{"word":"Tannat","respelling":"tah-NAHT","page":85,"group":"United States","lang":"fr-FR","langs":["fr-FR"],"say":"Tannat","en":"tah-naht"},{"word":"Tempranillo","respelling":"tem-prah-NEE-yoh","page":null,"group":"Grapes You Will Meet Everywhere","lang":"es-ES","langs":["es-ES"],"say":"Tempranillo","en":"tem-prah-nee-yoh"},{"word":"Tokaji","respelling":"TOH-koy-ee","page":70,"group":"Hungary","lang":"hu-HU","langs":["hu-HU"],"say":"Tokaji","en":"toh-koy-ee"},{"word":"Topaque","respelling":"toh-PAHK","page":93,"group":"Australia","lang":"en-AU","langs":["en-AU","en-GB"],"say":"toh-pahk","en":"toh-pahk"},{"word":"Torrontés","respelling":"tor-rohn-TESS","page":91,"group":"Argentina","lang":"es-AR","langs":["es-AR","es-419","es-US","es-ES"],"say":"Torrontés","en":"tor-rohn-tess"},{"word":"Touriga Nacional","respelling":"too-REE-gah nah-syoo-NAHL","page":55,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Touriga Nacional","en":"too-ree-gah nah-syoo-nahl"},{"word":"trocken","respelling":"TROCK-en","page":60,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"trocken","en":"trock-en"},{"word":"Uco","respelling":"OO-koh","page":91,"group":"Argentina","lang":"es-AR","langs":["es-AR","es-419","es-US","es-ES"],"say":"Uco","en":"oo-koh"},{"word":"Ürzig","respelling":"UR-tsikh","page":63,"group":"Germany","lang":"de-DE","langs":["de-DE"],"say":"Ürzig","en":"ur-tsikh"},{"word":"Valle de Guadalupe","respelling":"VAH-yeh deh gwah-dah-LOO-peh","page":77,"group":"Mexico","lang":"es-MX","langs":["es-MX","es-US","es-419","es-ES"],"say":"Valle de Guadalupe","en":"vah-yeh deh gwah-dah-loo-peh"},{"word":"Valpolicella","respelling":"vahl-poh-lee-CHELL-ah","page":45,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Valpolicella","en":"vahl-poh-lee-chell-ah"},{"word":"Verdicchio","respelling":"vehr-DEEK-yoh","page":48,"group":"Italy","lang":"it-IT","langs":["it-IT"],"say":"Verdicchio","en":"vehr-deek-yoh"},{"word":"Vidal","respelling":"vee-DAHL","page":86,"group":"Canada","lang":"fr-FR","langs":["fr-FR","fr-CA"],"say":"Vidal","en":"vee-dahl"},{"word":"Vinho Verde","respelling":"VEEN-yoo VEHR-deh","page":57,"group":"Portugal","lang":"pt-PT","langs":["pt-PT","pt-BR"],"say":"Vinho Verde","en":"veen-yoo vehr-deh"},{"word":"Viognier","respelling":"vee-ohn-YAY","page":85,"group":"United States","lang":"fr-FR","langs":["fr-FR"],"say":"Viognier","en":"vee-ohn-yay"},{"word":"Vosne-Romanée","respelling":"vohn roh-mah-NAY","page":25,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Vosne-Romanée","en":"vohn roh-mah-nay"},{"word":"Vouvray","respelling":"voo-VRAY","page":31,"group":"France","lang":"fr-FR","langs":["fr-FR"],"say":"Vouvray","en":"voo-vray"},{"word":"Wachau","respelling":"vah-KHOW","page":67,"group":"Austria","lang":"de-AT","langs":["de-AT","de-DE"],"say":"Wachau","en":"vah-khow"},{"word":"Walla Walla","respelling":"WAH-luh WAH-luh","page":81,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Walla Walla","en":"wah-luh wah-luh"},{"word":"Willamette","respelling":"wil-LAM-et","page":79,"group":"United States","lang":"en-US","langs":["en-US"],"say":"will-am-it","en":"will-am-it"},{"word":"Xinomavro","respelling":"ksee-NO-mah-vro","page":68,"group":"Greece","lang":"el-GR","langs":["el-GR"],"say":"Ξινόμαυρο","en":"ksee-no-mah-vro"},{"word":"Yakima","respelling":"YAK-ih-muh","page":81,"group":"United States","lang":"en-US","langs":["en-US"],"say":"Yakima","en":"yak-ih-muh"},{"word":"Yarra","respelling":"YAR-uh","page":93,"group":"Australia","lang":"en-AU","langs":["en-AU"],"say":"Yarra","en":"yar-uh"},{"word":"Zinfandel","respelling":"ZIN-fun-del","page":null,"group":"Grapes You Will Meet Everywhere","lang":"en-US","langs":["en-US"],"say":"Zinfandel","en":"zin-fun-del"}]}</script>
+<script>
+(function () {
+  "use strict";
+  var DATA = JSON.parse(document.getElementById("data").textContent);
+  var E = DATA.entries;
+  var $ = function (id) { return document.getElementById(id); };
+  var store = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  /* ---------- speech ---------- */
+  var synth = null;
+  try { synth = ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window) ? window.speechSynthesis : null; } catch (e) { synth = null; }
+  var voices = [];
+  var NOVELTY = /^(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|pipe organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|fred|kathy|princess|bruce|agnes|vicki|victoria)\b/i;
+  var GOOD = /premium|enhanced|natural|neural|online|google|siri/i;
+  function norm(l) { return String(l || "").replace(/_/g, "-").toLowerCase(); }
+  function loadVoices() {
+    if (!synth) return;
+    try { voices = (synth.getVoices() || []).filter(function (v) { return !NOVELTY.test(v.name); }); } catch (e) { voices = []; }
+  }
+  function best(list) {
+    return list.slice().sort(function (a, b) {
+      var s = function (v) { return (GOOD.test(v.name) ? 2 : 0) + (v.localService ? 1 : 0) + (v["default"] ? 0.5 : 0); };
+      return s(b) - s(a);
+    })[0] || null;
+  }
+  function byExact(l) { l = norm(l); return voices.filter(function (v) { return norm(v.lang) === l; }); }
+  function byBase(l) { var b = norm(l).split("-")[0]; return voices.filter(function (v) { return norm(v.lang).split("-")[0] === b; }); }
+  /* Returns {voice, lang, text, how}. Order: each preferred locale exactly, then any voice of each base language,
+     then an English voice reading the book's respelling. */
+  function choose(e) {
+    var i, v;
+    for (i = 0; i < e.langs.length; i++) { v = best(byExact(e.langs[i])); if (v) return { voice: v, lang: v.lang, text: e.say, how: "native" }; }
+    for (i = 0; i < e.langs.length; i++) { v = best(byBase(e.langs[i])); if (v) return { voice: v, lang: v.lang, text: e.say, how: "base" }; }
+    var en = best(byExact("en-US")) || best(byBase("en"));
+    var isEn = norm(e.langs[0]).indexOf("en") === 0;
+    return { voice: en, lang: en ? en.lang : "en-US", text: isEn ? e.say : e.en, how: "respelling" };
+  }
+  window.__sayLog = [];
+  window.__chooseVoice = choose;
+  var LANGNAME = { fr: "French", it: "Italian", es: "Spanish", pt: "Portuguese", de: "German", hu: "Hungarian", el: "Greek", ka: "Georgian",
+                   en: "English", af: "Afrikaans", nl: "Dutch", ca: "Catalan", gl: "Galician" };
+  var current = null, statusTimer = null;
+  function showStatus(msg) {
+    var s = $("status"); s.textContent = msg; s.classList.add("show");
+    clearTimeout(statusTimer); statusTimer = setTimeout(function () { s.classList.remove("show"); }, 2600);
+  }
+  function setOn(btn, on) { if (btn) { btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", on ? "true" : "false"); } }
+  function speak(e, btn) {
+    if (!synth) return;
+    try {
+      if (!voices.length) loadVoices();
+      synth.cancel();
+      if (current) setOn(current, false);
+      var c = choose(e);
+      var u = new SpeechSynthesisUtterance(c.text);
+      if (c.voice) u.voice = c.voice;
+      u.lang = c.lang;
+      u.rate = $("slow").checked ? 0.7 : 0.95;
+      u.pitch = 1;
+      current = btn; setOn(btn, true);
+      u.onend = u.onerror = function () { if (current === btn) { setOn(btn, false); current = null; } };
+      var rec = { word: e.word, wanted: e.langs[0], lang: c.lang, voice: c.voice ? c.voice.name : "(browser default)", text: c.text, how: c.how, rate: u.rate };
+      window.__sayLog.push(rec);
+      if (window.console && console.debug) console.debug("say", rec);
+      synth.speak(u);
+      if (synth.paused) synth.resume();
+      var ln = LANGNAME[norm(c.lang).split("-")[0]] || c.lang;
+      showStatus(c.how === "respelling" && norm(e.langs[0]).indexOf("en") !== 0
+        ? "No " + (LANGNAME[norm(e.langs[0]).split("-")[0]] || "") + " voice here: reading the respelling"
+        : ln + " voice" + (c.voice ? ": " + c.voice.name : ""));
+    } catch (err) {
+      setOn(btn, false); current = null;
+      showStatus("Your device could not speak this name. Use the respelling.");
+    }
+  }
+  if (synth) {
+    loadVoices();
+    try {
+      if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
+      else synth.onvoiceschanged = loadVoices;
+    } catch (e) {}
+    var tries = 0, poll = setInterval(function () { loadVoices(); if (voices.length || ++tries > 20) clearInterval(poll); }, 250);
+  } else {
+    $("nospeech").hidden = false;
+  }
+
+  /* ---------- list ---------- */
+  function fold(s) { return String(s).normalize ? String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase() : String(s).toLowerCase(); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function respell(r) {
+    return esc(r).split(/(\s+|-)/).map(function (t) {
+      return (/[A-Z]{2,}|^[A-Z]$/.test(t) && t === t.toUpperCase() && /[A-Z]/.test(t)) ? "<b>" + t + "</b>" : t;
+    }).join("");
+  }
+  var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5v5h3.6L11 19V5L6.6 9.5H3z"/><path d="M14.5 8.2a5 5 0 0 1 0 7.6l-1-1.2a3.4 3.4 0 0 0 0-5.2zM16.8 5.6a8.4 8.4 0 0 1 0 12.8l-1-1.2a6.8 6.8 0 0 0 0-10.4z"/></svg>';
+  E.forEach(function (e, i) { e.i = i; e.f = fold(e.word + " " + e.respelling + " " + e.group); e.letter = fold(e.word).charAt(0).toUpperCase(); });
+  var view = store.get("sir-view") === "country" ? "country" : "az";
+  var slowSaved = store.get("sir-slow"); if (slowSaved === "0") $("slow").checked = false;
+
+  function row(e) {
+    return '<li class="e"><span class="nm" lang="' + esc(e.lang.split("-")[0]) + '">' + esc(e.word) + '</span>' +
+      '<span class="rs">' + respell(e.respelling) + '</span>' +
+      '<span class="pg">' + (e.page ? "p. " + e.page : "grape") + '</span>' +
+      '<button type="button" class="play" data-i="' + e.i + '" aria-pressed="false" aria-label="Hear ' + esc(e.word) + '"' + (synth ? "" : " disabled") + '>' + PLAY + '</button></li>';
+  }
+  function render() {
+    var q = fold($("q").value.trim());
+    var hits = E.filter(function (e) { return !q || e.f.indexOf(q) !== -1; });
+    var html = "", groups = [], map = {};
+    if (view === "az") {
+      hits.forEach(function (e) { if (!map[e.letter]) { map[e.letter] = []; groups.push(e.letter); } map[e.letter].push(e); });
+      groups.forEach(function (g) { html += "<h2>" + g + "</h2><ul>" + map[g].map(row).join("") + "</ul>"; });
+    } else {
+      hits.forEach(function (e) { (map[e.group] = map[e.group] || []).push(e); });
+      DATA.groups.forEach(function (g) {
+        if (!map[g]) return;
+        var list = map[g].slice().sort(function (a, b) { return (a.page || 999) - (b.page || 999) || fold(a.word).localeCompare(fold(b.word)); });
+        var pgs = list.map(function (e) { return e.page; }).filter(Boolean);
+        var span = pgs.length ? (Math.min.apply(null, pgs) === Math.max.apply(null, pgs) ? "p. " + pgs[0] : "pp. " + Math.min.apply(null, pgs) + "-" + Math.max.apply(null, pgs)) : "";
+        html += "<h2>" + esc(g) + (span ? "<span>" + span + "</span>" : "") + "</h2><ul>" + list.map(row).join("") + "</ul>";
+      });
+    }
+    $("list").innerHTML = html || '<p class="empty">No name matches "' + esc($("q").value) + '". Try fewer letters, or search without accents.</p>';
+    $("count").textContent = (q ? hits.length + " of " : "") + E.length + " names" + (q ? "" : " from the atlas pronunciation key");
+  }
+  function setView(v) {
+    view = v; store.set("sir-view", v);
+    $("vAZ").setAttribute("aria-pressed", v === "az" ? "true" : "false");
+    $("vCountry").setAttribute("aria-pressed", v === "country" ? "true" : "false");
+    render();
+  }
+  $("vAZ").addEventListener("click", function () { setView("az"); });
+  $("vCountry").addEventListener("click", function () { setView("country"); });
+  $("q").addEventListener("input", render);
+  $("slow").addEventListener("change", function () { store.set("sir-slow", this.checked ? "1" : "0"); });
+  $("list").addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest(".play") : null;
+    if (!b || b.disabled) return;
+    speak(E[+b.getAttribute("data-i")], b);
+  });
+  setView(view);
+})();
+</script>
+</body>
+</html>
