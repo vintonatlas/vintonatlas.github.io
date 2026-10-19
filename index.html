@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wine Lover's Atlas</title>
+<style>
+  body { font-family: Georgia, serif; background: #F7F1E8; color: #2B2420; text-align: center; padding: 3rem 1rem; }
+  a { color: #7A1F2E; }
+</style>
+</head>
+<body>
+<p>Opening your gifts...</p>
+<p><a id="manual" href="https://claude.ai/artifact/6jJbryDdayhFMNyjbaokQQ">Tap here if nothing happens</a></p>
+<script>
+  // Fallback: the real gifts page. Used only if destinazione.txt cannot be read.
+  var FALLBACK = "https://claude.ai/artifact/6jJbryDdayhFMNyjbaokQQ";
+  fetch("destinazione.txt?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.ok ? r.text() : ""; })
+    .then(function (t) {
+      var url = (t || "").trim().split(/\r?\n/)[0];
+      if (!/^https:\/\//.test(url)) url = FALLBACK;
+      document.getElementById("manual").href = url;
+      location.replace(url);
+    })
+    .catch(function () { location.replace(FALLBACK); });
+</script>
+</body>
+</html>
