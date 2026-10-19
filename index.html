@@ -148,9 +148,9 @@ p { margin: 0; }
   function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function showGifts() { thanks.hidden = true; gifts.hidden = false; window.scrollTo(0, 0); }
   function unlock() { extras.classList.remove("locked"); document.getElementById("extras2").classList.remove("locked"); var b = document.getElementById("unlockBtn"); b.textContent = "Gifts unlocked"; b.disabled = true; }
-  document.getElementById("go").addEventListener("click", function () { save("wla-seen", "1"); showGifts(); });
+  document.getElementById("go").addEventListener("click", function () { showGifts(); });
   document.getElementById("unlockBtn").addEventListener("click", function () { save("wla-unlocked", "1"); unlock(); });
-  if (location.hash === "#gifts" || load("wla-seen") === "1") showGifts();
+  // always open on the Thank you page; the gifts page shows after the tap
   if (load("wla-unlocked") === "1") unlock();
 })();
 </script>
